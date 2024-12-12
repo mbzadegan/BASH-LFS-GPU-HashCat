@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Here's an example of a challenging bash script that involves file manipulation, process management, and logging. The script is designed to monitor a directory for changes and process new files by running custom commands on them
+
+# Directory to monitor
+MONITOR_DIR="$HOME/monitor"
+# Log file
+LOG_FILE="$HOME/monitor/log.txt"
+# Processed files directory
+PROCESSED_DIR="$HOME/monitor/processed"
+
+# Ensure necessary directories exist
+mkdir -p "$MONITOR_DIR" "$PROCESSED_DIR"
+
+echo "Monitoring directory: $MONITOR_DIR" | tee -a "$LOG_FILE"
+
+# Infinite loop to monitor the directory
+while true; do
+    # Find new files (excluding already processed ones)
+    for file in "$MONITOR_DIR"/*; do
+        # Check if it is a regular file
+        if [[ -f "$file" ]]; then
+            base_name="$(basename "$file")"
+            processed_file="$PROCESSED_DIR/$base_name"
+
+            # Skip if the file has already been processed
+            if [[ -f "$processed_file" ]]; then
+                continue
+            fi
+
+            echo "Processing file: $file" | tee -a "$LOG_FILE"
+
+            # Custom processing: Example - counting lines in the file
+            line_count=$(wc -l < "$file")
+            echo "File: $base_name | Line count: $line_count" | tee -a "$LOG_FILE"
+
+            # Move file to the processed directory
+            mv "$file" "$PROCESSED_DIR/"
+            echo "File moved to: $processed_file" | tee -a "$LOG_FILE"
+        fi
+    done
+
+    # Pause to avoid excessive CPU usage
+    sleep 5
+
+done
