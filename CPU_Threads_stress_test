@@ -1,0 +1,27 @@
+#!/bin/bash
+
+
+# A common way to simulate a challenging process is by performing computationally intensive tasks, such as mathematical calculations or cryptographic operations, in parallel.
+# Below is an example script that spawns a CPU-intensive process on each thread using a for loop and background processes:
+
+
+# Get the number of CPU threads
+NUM_THREADS=$(nproc)
+
+echo "Utilizing $NUM_THREADS CPU threads..."
+
+# Function to simulate a CPU-intensive task
+cpu_intensive_task() {
+  while true; do
+    # Perform heavy floating-point operations
+    echo "scale=5000; a(1)*4" | bc -l > /dev/null
+  done
+}
+
+# Launch a process for each thread
+for ((i=1; i<=NUM_THREADS; i++)); do
+  cpu_intensive_task &
+done
+
+# Wait for all background processes (if needed)
+wait
