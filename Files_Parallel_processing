@@ -4,6 +4,7 @@
 
 # Directory to monitor
 MONITOR_DIR="$HOME/monitor"
+
 # Log file
 LOG_FILE="$HOME/monitor/log.txt"
 # Processed files directory
